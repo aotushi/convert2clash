@@ -112,6 +112,39 @@ convert2clash/
 3. 建议定期更新订阅以获取最新节点
 4. 如遇到解析错误，请检查订阅链接格式
 
+## 订阅链接参数说明
+
+- 通过 GET 请求传递订阅链接时，**必须对订阅链接进行 URL 编码**，否则参数会被截断，导致无法正确获取节点。
+- 例如：
+  - 原始订阅链接：
+    ```
+    https://jmssub.net/members/getsub.php?service=75462&id=xxxx
+    ```
+  - URL 编码后：
+    ```
+    https%3A%2F%2Fjmssub.net%2Fmembers%2Fgetsub.php%3Fservice%3D75462%26id%3Dxxxx
+    ```
+   可以在浏览器控制台直接使用相关api:`encodeURIComponent(url)`来进行格式转换
+   
+  - Worker 访问示例：
+    ```
+    https://your-worker.workers.dev/?url=https%3A%2F%2Fjmssub.net%2Fmembers%2Fgetsub.php%3Fservice%3D75462%26id%3Dxxxx
+    ```
+
+### 常见问题 FAQ
+
+- **Q: 为什么直接传递带参数的订阅链接会失败？**
+  - A: GET 请求的参数分隔符 `&` 会导致订阅链接被截断，必须先进行 URL 编码。
+
+- **Q: 如何进行 URL 编码？**
+  - A: 可以使用 [urlencoder.org](https://www.urlencoder.org/) 或浏览器控制台：
+    ```js
+    encodeURIComponent('你的订阅链接')
+    ```
+
+- **Q: 解析报错 Buffer is not defined？**
+  - A: 已修复，现已全部使用 atob 兼容 Cloudflare Worker 环境。
+
 ## 常见问题
 
 1. Q: 为什么转换后的配置无法使用？
